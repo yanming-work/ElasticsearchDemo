@@ -364,19 +364,17 @@ public class EsController {
 	/**
 	 * 查询分页
 	 * 
-	 * @param startPage
-	 *            第几条记录开始 从0开始 第1页
-	 *            ：http://127.0.0.1:8080/es/queryPage?startPage=0&pageSize=2 第2页
-	 *            ：http://127.0.0.1:8080/es/queryPage?startPage=2&pageSize=2
+	 * @param pageNum
+	 *             第几页
 	 * @param pageSize
 	 *            每页大小
 	 * @return
 	 */
 	@RequestMapping("/queryPage")
 	@ResponseBody
-	public PageInfo<Map<String, Object>> queryPage(String startPage, String pageSize) {
+	public PageInfo<Map<String, Object>> queryPage(String pageNum, String pageSize) {
 		PageInfo<Map<String, Object>> pageInfo =null;
-		if (StringUtils.isNotBlank(startPage) && StringUtils.isNotBlank(pageSize)) {
+		if (StringUtils.isNotBlank(pageNum) && StringUtils.isNotBlank(pageSize)) {
 			BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 			boolQuery.must(QueryBuilders.rangeQuery("id").from("0").to("100000"));
 			boolQuery.must(QueryBuilders.termQuery("age","27"));
@@ -390,7 +388,7 @@ public class EsController {
 			boolQuery.must(QueryBuilders.boolQuery().should(QueryBuilders.termQuery("b","3"))
 					.should(QueryBuilders.termQuery("b","4")));
 					**/
-			pageInfo = ElasticsearchService.searchDataPage(indexName, esType, Integer.parseInt(startPage),
+			pageInfo = ElasticsearchService.searchDataPage(indexName, esType, Integer.parseInt(pageNum),
 					Integer.parseInt(pageSize), boolQuery, null, "id","DESC",  null);
 			
 		} 
